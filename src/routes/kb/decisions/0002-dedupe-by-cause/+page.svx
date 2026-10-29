@@ -4,7 +4,7 @@ title: '0002 · Separate the causes hidden in #4471'
 owner: artur7
 status: proposed
 reviewed: 2026-10-29
-signature: 'artur7 / Copilot'
+signature: 'v1.eyJzdWIiOiIyODc4IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMyNjE5MDAsImV4cCI6MTc5MzM0ODMwMH0.HYz0Re6dMUb29FAFMXgsQum7knfPHpQ4Wxm5XqwPBbo'
 supersedes: '/kb/decisions/0001-dedupe-by-subject'
 ---
 

@@ -39,8 +39,8 @@ Exported 2026-10-04 from the `support` repo, `apps/kb/` → `src/`.
 
 The added review is
 [`0002 · Separate the causes hidden in #4471`](src/routes/kb/decisions/0002-dedupe-by-cause/+page.svx).
-It is signed `artur7 / Copilot` and proposes a replacement for subject-only
-merging. The original accepted decision and the exported reports are unchanged.
+It carries the course-issued page signature and proposes a replacement for
+subject-only merging. The original accepted decision and the exported reports are unchanged.
 Counts describe the export, not the live support queue.
 
 The export had no application manifest. This repository adds a minimal
