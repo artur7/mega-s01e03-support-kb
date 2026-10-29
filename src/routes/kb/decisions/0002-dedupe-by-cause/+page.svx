@@ -20,7 +20,8 @@ supersedes: '/kb/decisions/0001-dedupe-by-subject'
 
 The [original incident page](/kb/incidents/4471) says that one parser fix covers
 every report. Its rendered cause table contradicts that claim. The export
-contains two distinct mechanisms, so the desk needs separate tickets and fixes.
+contains two distinct mechanisms, so the desk needs separate tickets and
+resolutions.
 
 The public tickets are
 [shared date parser](https://github.com/artur7/mega-s01e03-support-kb/issues/1) and
@@ -31,6 +32,20 @@ This is a review of the export dated 4 October 2026, not a live view of the desk
 The desk can receive and merge more reports while this review is being written.
 The proposed rule below replaces decision 0001 only after the desk accepts it.
 </Callout>
+
+## Engineering update after the initial review
+
+The [course desk update](https://hq.mega.dev/challenges/what-it-shows) reports
+that #4471 closed on 5 October:
+
+- The parser was fixed: `fix(dates): parse dd/mm for eu locales`.
+- The hint was marked **won't fix** because the booking-v3 form was retired.
+
+The parser ticket is therefore completed; the hint ticket is not planned.
+Retiring the form is not evidence that its hint was repaired. These are reported
+engineering outcomes, not fixes independently tested against production by this
+review. The historical allocation and anomalous report bodies below remain
+visible; the update does not establish a separate cause for those bodies.
 
 ## Counts from the export
 
