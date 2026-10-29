@@ -1,0 +1,118 @@
+---
+layout: runbook
+title: '0002 · Separate the causes hidden in #4471'
+owner: artur7
+status: proposed
+reviewed: 2026-10-29
+signature: 'artur7 / Copilot'
+supersedes: '/kb/decisions/0001-dedupe-by-subject'
+---
+
+<script>
+  import Callout from '#lib/kb/Callout.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+## What the desk should know
+
+The [original incident page](/kb/incidents/4471) says that one parser fix covers
+every report. Its rendered cause table contradicts that claim. The export
+contains two distinct mechanisms, so the desk needs separate tickets and fixes.
+
+The public tickets are
+[shared date parser](https://github.com/artur7/mega-s01e03-support-kb/issues/1) and
+[booking-v3 date hint](https://github.com/artur7/mega-s01e03-support-kb/issues/2).
+
+<Callout>
+This is a review of the export dated 4 October 2026, not a live view of the desk.
+The desk can receive and merge more reports while this review is being written.
+The proposed rule below replaces decision 0001 only after the desk accepts it.
+</Callout>
+
+## Counts from the export
+
+The table below runs the exported classification code. Reports are deduplicated
+by report ID before filtering to ticket #4471. Classification uses the tenant's
+locale, booking-form version and report channel; browser locale, intake tags and
+matching subjects are not proof of cause.
+
+<CauseTable ticket={4471} />
+
+### Shared date parser
+
+The shared parser treats input as month first even when the tenant writes day
+first. An app or email report from a day-first tenant belongs here; a form report
+using booking-v2 does too. For example, Harbour Dental's app report R-41200 says
+that 7 April became 4 July.
+
+The parser issue should establish an explicit input-date contract and verify
+day/month handling across affected locales and channels. It must not be closed
+just because the booking-v3 hint is corrected.
+
+### Booking-v3 date hint
+
+Booking-v3 prints `MM/DD/YYYY`, but its form reads the input in the tenant's
+day-first order. A person following the hint therefore gets a different date.
+These are form reports from Alder Physio, Copper Studio and Pale Harbour.
+R-41230 is an example: Copper Studio uses booking-v3 and `es-ES`, despite the
+report's `en-GB` browser locale and `parser` intake tag.
+
+The hint issue should make the displayed format match the form's actual input
+contract and verify that following the hint preserves the intended date.
+Changing only the shared parser does not resolve this separate UI contract.
+
+### Reports requiring follow-up
+
+The table's one-day-move footnote is evidence of uncertainty, not a confirmed
+third cause. The desk notes identify R-41202, R-41209, R-41236, R-41344 and R-41620.
+Their bodies describe one-day or temporal anomalies, but the exported classifier
+places them under parser from tenant and channel alone.
+
+Keep that limitation visible on the parser ticket. Ask for the original input,
+expected and actual dates, timezone and processing trace before asserting a
+timezone bug or changing the allocation. Do not silently drop these reports or
+double-count them in another ticket.
+
+## When the reports arrived
+
+<QueueTimeline ticket={4471} />
+
+The received and merged bars are different events. Reports arrived before the
+July merge backlog was processed and continued afterwards. A merge spike does
+not establish an arrival spike, a new regression date or a completed fix.
+
+## Proposed replacement for subject-only merging
+
+This is a new decision record. The accepted
+[decision 0001](/kb/decisions/0001-dedupe-by-subject) is preserved unchanged.
+On acceptance, use this record instead of the old
+[subject-only triage rule](/kb/triage/dedupe).
+
+1. Read the report body and look up its tenant, locale, form version and channel.
+2. Compare the observed failure and mechanism with the candidate ticket.
+3. Merge only when the evidence supports the same cause. Matching subjects alone
+   are insufficient; different subjects alone do not rule out a duplicate.
+4. If the tenant is unknown, the evidence conflicts or the mechanism is unclear,
+   keep the report separate and request the missing facts.
+5. Count each report ID once. Preserve report IDs, receipt times and merge times
+   so another reviewer can reproduce the split.
+
+<DedupeExplorer />
+
+The explorer illustrates both directions: the same subject can hide different
+causes, and different subjects can describe the same cause. Its classifications
+are evidence from this export, not a substitute for reading anomalous reports.
+
+## Source of the findings
+
+The export's `src/lib/kb/causes.ts` defines the classifier and deduplication.
+`src/lib/kb/locales.ts` resolves tenants from `src/lib/data/tenants/`.
+`src/lib/data/reports-4471.json` contains the reports, and
+`src/lib/data/desk-notes.json` identifies the anomalous bodies.
+The rendered tables and chart above run that code rather than copying the
+original incident page's prose.
+
+<RenderStamp {signature} />
